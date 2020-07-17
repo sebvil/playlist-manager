@@ -14,6 +14,10 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import ResponsivePlayer from "./ResponsivePlayer";
+import Checkbox from '@material-ui/core/Checkbox';
+
+
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -97,11 +101,13 @@ const useStyles = makeStyles({
 //   createData('Gingerbread', 356, 16.0, 49, 3.9),
 // ];
 
-export default function TracksTable() {
-  const [trackData, setTrackData] = useState([]);
+export default function TracksTable(props) {
+  // const [trackData, setTrackData] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const { trackData, handleChangeClick, checked } = props;
 
+  console.log(props);
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, trackData.length - page * rowsPerPage);
 
   const handleChangePage = (event, newPage) => {
@@ -114,16 +120,7 @@ export default function TracksTable() {
   };
 
 
-  useEffect(() => {
-    console.log('test')
-    fetch('/search?artist=melendi&unique=True').then(res => res.json()).then(data => {
-      let result = data['result'];
-      result.sort((a,b) => (a.track > b.track) ? 1 : -1)
-      setTrackData(result)
-    });
-  }, []);
   const classes = useStyles();
-
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="custom pagination table">
@@ -138,8 +135,19 @@ export default function TracksTable() {
              </TableCell>
              <TableCell align="right">{row.artist}</TableCell>
              <TableCell align="right">{row.album}</TableCell>
-             <TableCell align="right">{row.preview_url}</TableCell>
-             <TableCell align="right">{row.selected}</TableCell>
+             <TableCell align="right" style={{width: '50%'}}>
+               <ResponsivePlayer
+               url={row.preview_url}
+             /></TableCell>
+             <TableCell align="right">
+               <Checkbox
+                 checked={checked.indexOf(row) !== -1}
+                 onChange={() => {
+                   handleChangeClick(row);
+                 }}
+                 inputProps={{ 'aria-label': row.track_id }}
+               />
+             </TableCell>
            </TableRow>
           ))}
 
