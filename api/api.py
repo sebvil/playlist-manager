@@ -38,8 +38,8 @@ def foo():
 
 
 #  Client Keys
-CLIENT_ID = "eff9cc476569450dae3888575a2f3d23"
-CLIENT_SECRET = "3d2f89fcc6f54e9196f58f1f1ef80354"
+CLIENT_ID = ""
+CLIENT_SECRET = ""
 
 # Spotify URLS
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
