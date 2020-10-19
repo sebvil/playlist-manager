@@ -61,6 +61,10 @@ class Query:
         try:
             while results := sp.search(q=self.q, limit=50, offset=offset):
                 offset += 50
+                print(offset)
+                print(results)
+                if not results['tracks']['items']:
+                    break
                 for track in results['tracks']['items']:
                     temp = 0
                     track_id = track['id']
@@ -102,6 +106,8 @@ class Query:
         #             print(t, track_names[t])
         except spotipy.exceptions.SpotifyException:
             return query_results
+
+        return query_results
 
 
 class QueryResult:
