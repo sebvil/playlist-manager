@@ -25,7 +25,7 @@ class Home extends React.Component {
     super(props);
 
     this.state = {
-      username : '',
+      username: '',
       loading: true,
       playlists: null,
       checked: [],
@@ -64,9 +64,9 @@ class Home extends React.Component {
       }
     }).then(() => {
       fetch('/get_playlists').then(res => res.json().then(data => {
-        this.setState({playlists : data['playlists']}, () => {
+        this.setState({ playlists: data['playlists'] }, () => {
           console.log(this.state.playlists);
-          this.setState({loading : false})
+          this.setState({ loading: false })
         });
       }));
     }).catch(err => {
@@ -108,36 +108,36 @@ class Home extends React.Component {
         newChecked.splice(currentIndex, 1);
       }
 
-      this.setState({checked : newChecked});
+      this.setState({ checked: newChecked });
     };
 
     const handleSearchChange = (event) => {
-      this.setState({search : event.target.value});
+      this.setState({ search: event.target.value });
     };
 
     const handleArtistChange = (event) => {
-      this.setState({artist : event.target.value});
+      this.setState({ artist: event.target.value });
     };
 
     const handleAlbumChange = (event) => {
-      this.setState({album : event.target.value});
+      this.setState({ album: event.target.value });
     };
 
     const handleButtonClick = () => {
-      this.setState({searchCount: this.state.searchCount + 1});
+      this.setState({ searchCount: this.state.searchCount + 1 });
     }
 
     const handleClickOpen = () => {
       console.log(this.state);
-      this.setState({open: true});
+      this.setState({ open: true });
     };
 
     const handleClose = () => {
-      this.setState({open : false});
+      this.setState({ open: false });
     };
 
     const handleChange = (event) => {
-      this.setState({visibility : event.target.value});
+      this.setState({ visibility: event.target.value });
     }
 
     const handleSearch = () => {
@@ -173,8 +173,8 @@ class Home extends React.Component {
       console.log(query);
       fetch(query).then(res => res.json()).then(data => {
         let result = data['result']
-        result.sort((a,b) => (a.track > b.track) ? 1 : -1)
-        this.setState({tracks : result});
+        result.sort((a, b) => (a.track > b.track) ? 1 : -1)
+        this.setState({ tracks: result });
       });
     }
 
@@ -188,12 +188,12 @@ class Home extends React.Component {
         newChecked.splice(currentIndex, 1);
       }
 
-      this.setState({checkedTracks : newChecked});
+      this.setState({ checkedTracks: newChecked });
     }
     const handleNewPlaylist = (name, visibility) => {
       let playlists = this.state.checked.map(playlist => playlist['uri']);
 
-      fetch('/new/'+name+'/'+visibility).then(ref => ref.json().then(data => {
+      fetch('/new/' + name + '/' + visibility).then(ref => ref.json().then(data => {
         if ('error' in data) {
           console.log(data);
         }
@@ -201,12 +201,12 @@ class Home extends React.Component {
           console.log(data);
         }
       }).then(() => {
-        this.setState({open : false});
+        this.setState({ open: false });
       }));
     }
 
     if (this.state.loading) {
-      return(
+      return (
         <CircularProgress />
       );
 
@@ -222,97 +222,97 @@ class Home extends React.Component {
       fetch('/add', {
         method: 'POST',
         body: JSON.stringify(data),
-        headers:{ 'Content-Type': 'application/json' }
-    }).then(res => res.json().then(data => {
+        headers: { 'Content-Type': 'application/json' }
+      }).then(res => res.json().then(data => {
         console.log(data);
       }));
     }
-    return(
-      <div style={{display : 'flex', overflowY :'hidden'}}>
-        <div style={{flex : 1, maxHeight : this.state.height, overflow : 'hidden', minWidth: '200px'}}>
-      <div>
-      <List style={{overflow : 'auto', maxHeight : this.state.height - 120}}>
-        {this.state.playlists.map((value) => {
-          const labelId = `checkbox-list-label-${value['name']}`;
-          return (
-            <ListItem key={value['name']} role={undefined} dense button onClick={handleToggle(value)}>
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={this.state.checked.indexOf(value) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ 'aria-labelledby': labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={value['name']} style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}/>
-            </ListItem>
-          );
-        })}
-      </List>
-      </div>
-      <div >
-        <Fab color='primary'
-             aria-label='add'
-             variant='extended'
-             size='small'
-             onClick={handleClickOpen}>
-          <AddIcon />
+    return (
+      <div style={{ display: 'flex', overflowY: 'hidden' }}>
+        <div style={{ flex: 1, maxHeight: this.state.height, overflow: 'hidden', minWidth: '200px' }}>
+          <div>
+            <List style={{ overflow: 'auto', maxHeight: this.state.height - 120 }}>
+              {this.state.playlists.map((value) => {
+                const labelId = `checkbox-list-label-${value['name']}`;
+                return (
+                  <ListItem key={value['name']} role={undefined} dense button onClick={handleToggle(value)}>
+                    <ListItemIcon>
+                      <Checkbox
+                        edge="start"
+                        checked={this.state.checked.indexOf(value) !== -1}
+                        tabIndex={-1}
+                        disableRipple
+                        inputProps={{ 'aria-labelledby': labelId }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText id={labelId} primary={value['name']} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} />
+                  </ListItem>
+                );
+              })}
+            </List>
+          </div>
+          <div >
+            <Fab color='primary'
+              aria-label='add'
+              variant='extended'
+              size='small'
+              onClick={handleClickOpen}>
+              <AddIcon />
           New Playlist
         </Fab>
-      </div>
+          </div>
         </div>
-        <div style={{flex: 4}}>
+        <div style={{ flex: 4 }}>
 
-          <div style={{display : 'flex'}}>
-            <FormControl style={{flex: 2}}>
-              <InputLabel htmlFor="search" style={{color:'white'}}>Enter search terms</InputLabel>
+          <div style={{ display: 'flex' }}>
+            <FormControl style={{ flex: 2 }}>
+              <InputLabel htmlFor="search" style={{ color: 'white' }}>Enter search terms</InputLabel>
               <Input
                 id="search"
                 value={this.state.search}
                 onChange={handleSearchChange}
-                style={{width: '75%', color:'white'}}
+                style={{ width: '75%', color: 'white' }}
                 aria-describedby="search-text"
               />
             </FormControl>
 
-            <FormControl style={{flex: 2}}>
-              <InputLabel htmlFor="artist-helper" style={{color:'white'}}>Filter by artist</InputLabel>
+            <FormControl style={{ flex: 2 }}>
+              <InputLabel htmlFor="artist-helper" style={{ color: 'white' }}>Filter by artist</InputLabel>
               <Input
                 id="artist-helper"
                 value={this.state.artist}
                 onChange={handleArtistChange}
                 aria-describedby="artist-helper-text"
-                style={{width: '75%', color:'white'}}
+                style={{ width: '75%', color: 'white' }}
               />
             </FormControl>
 
-            <FormControl style={{flex: 2}}>
-              <InputLabel htmlFor="album-helper" style={{color:'white'}}>Filter by album</InputLabel>
+            <FormControl style={{ flex: 2 }}>
+              <InputLabel htmlFor="album-helper" style={{ color: 'white' }}>Filter by album</InputLabel>
               <Input
                 id="album-helper"
                 value={this.state.album}
                 variant='filled'
                 onChange={handleAlbumChange}
                 aria-describedby="album-helper-text"
-                style={{width: '75%', color: 'white'}}
+                style={{ width: '75%', color: 'white' }}
               />
             </FormControl>
-            <Button style={{flex: 1, background: 'green'}} onClick={handleSearch} >Search</Button>
+            <Button style={{ flex: 1, background: 'green' }} onClick={handleSearch} >Search</Button>
           </div>
-     <TracksTable
-      trackData={this.state.tracks}
-      checked={this.state.checkedTracks}
-      handleChangeClick={handleChangeCheck}
-     />
-          <Button style={{background: 'green'}} onClick={handleAddToPlaylist} >Add to Playlist</Button>
+          <TracksTable
+            trackData={this.state.tracks}
+            checked={this.state.checkedTracks}
+            handleChangeClick={handleChangeCheck}
+          />
+          <Button style={{ background: 'green' }} onClick={handleAddToPlaylist} >Add to Playlist</Button>
         </div>
-      <DialogPrompt open={this.state.open}
-                    handleClose={handleClose}
-                    visibility={this.state.visibility}
-                    handleChange={handleChange}
-                    handleSubmit={handleNewPlaylist}
-      />
+        <DialogPrompt open={this.state.open}
+          handleClose={handleClose}
+          visibility={this.state.visibility}
+          handleChange={handleChange}
+          handleSubmit={handleNewPlaylist}
+        />
       </div>
     )
   }
